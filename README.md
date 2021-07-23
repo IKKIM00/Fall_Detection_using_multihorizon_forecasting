@@ -1,6 +1,23 @@
 # General Description
-A fall detection method with multi-horizon forecasting usring Temporal Fusion Transformers and other deep neural network methods.
+A fall detection method with multi-horizon forecasting usring Temporal Fusion Transformers and other deep learning methods.
 
+For deep methods, 1D CNN, single LSTM, stacked LSTM were used.
+
+All models were configured to forecast falls through the window size of data from the perspective of regression instead of classification.
+
+For the last predicted value, the class of the predicted values was classified on the basis of the threshold value. 
+
+To verify benchmark performance, we faithfully reproduced the 1D CNN and LSTM-basedmodels, although the model structures were modified to enable regression in both cases because they were tailored to the classification task.
+
+1D CNN model architecture is based on the model structure proposed in 2020 by Kraft et al([paper](https://github.com/IKKIM00/Fall_Detection_using_multihorizon_forecasting/files/6866631/Deep.Learning.Based.Fall.Detection.Algorithms.for.Embedded.Systems.Smartwatches.and.IoT.Devices.Using.Accelerometers.pdf)).
+
+Signle LSTM and stacked LSTM model is based on the model architecture proposed in 2019 by Luna et al ([paper](https://github.com/IKKIM00/Fall_Detection_using_multihorizon_forecasting/files/6866652/sensors-19-04885-v2.pdf)).
+
+## Multi-horizon forecasting result
+![model_pred](https://user-images.githubusercontent.com/37397258/126738142-7fc1218d-eb55-4f88-9c24-4112b320354b.jpg)
+Prediction results for the SmartFall, Notch, DLR and MobiAct datasets in order using:
+
+(a)-(d) TFT method, (e)-(h) Single LSTM, (i)-(l) Stacked LSTM, (m)-(p) 1D CNN
 
 # Download Dataset
 For `SmartFall` and `Notch` dataset, I have uploaded zip files in `dataset/`. You can also download data through the link below.
@@ -49,3 +66,6 @@ In each ipynb file, you can choose which DL method you want to use(`CNN, singleL
 
 
 ## For TFT Method
+1. Clone https://github.com/google-research/google-research/tree/master/tft
+2. Use each file named as `dlr_tft.ipynb`, `mobi_tft.ipynb`, `notchFall_tft.ipynb` and `smartFall_tft.ipynb` for TFT method.
+3. Files named as `dlr_tft_wo_bioinfo.ipynb` and `mobi_tft_no_bioinfo.ipynb` are for cases when personal biometric information is removed.
