@@ -1,4 +1,6 @@
 # General Description
+This code is for paper "Fall Detection Based on Multi-Horizon Forecasting"( Currently under review )
+
 A fall detection method with multi-horizon forecasting usring Temporal Fusion Transformers and other deep learning methods.
 
 For deep methods, 1D CNN, single LSTM, stacked LSTM were used.
