@@ -1,7 +1,11 @@
 results/
 repo/
-dataset/
-.ipynb_checkpoints/
+dataset/dlr_preprocessed/
+dataset/mobiact_dataset/
+dataset/mobiact_preprocessed/
+dataset/notch_dataset/
+dataset/smartFall_dataset/
 
+.ipynb_checkpoints/
 */__pycache__/
 
