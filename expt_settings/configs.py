@@ -26,7 +26,7 @@ import data_formatters.electricity
 import data_formatters.favorita
 import data_formatters.traffic
 import data_formatters.volatility
-import data_formatters.stock
+import data_formatters.mobiact
 
 
 class ExperimentConfig(object):
@@ -42,7 +42,7 @@ class ExperimentConfig(object):
       experiment.
   """
 
-  default_experiments = ['volatility', 'electricity', 'traffic', 'favorita', 'stock']
+  default_experiments = ['mobiact', 'dlr', 'notch', 'smartfall']
 
   def __init__(self, experiment='volatility', root_folder=None):
     """Creates configs based on default experiment chosen.
@@ -63,7 +63,7 @@ class ExperimentConfig(object):
 
     self.root_folder = root_folder
     self.experiment = experiment
-    self.data_folder = os.path.join(root_folder, 'data', experiment)
+    self.data_folder = os.path.join(root_folder, 'dataset', experiment)
     self.model_folder = os.path.join(root_folder, 'saved_models', experiment)
     self.results_folder = os.path.join(root_folder, 'results', experiment)
 
@@ -77,15 +77,11 @@ class ExperimentConfig(object):
 
   @property
   def data_csv_path(self):
-    csv_map = {
-        'volatility': 'formatted_omi_vol.csv',
-        'electricity': 'hourly_electricity.csv',
-        'traffic': 'hourly_data.csv',
-        'favorita': 'favorita_consolidated.csv',
-        'stock': 'stock.csv'
+    csv_path = {
+        'mobiact': 'mobi_preprocessed/'
     }
 
-    return os.path.join(self.data_folder, csv_map[self.experiment])
+    return os.path.join(self.data_folder, csv_path[self.experiment])
 
   @property
   def hyperparam_iterations(self):
@@ -100,11 +96,7 @@ class ExperimentConfig(object):
     """
 
     data_formatter_class = {
-        'volatility': data_formatters.volatility.VolatilityFormatter,
-        'electricity': data_formatters.electricity.ElectricityFormatter,
-        'traffic': data_formatters.traffic.TrafficFormatter,
-        'favorita': data_formatters.favorita.FavoritaFormatter,
-        'stock': data_formatters.stock.StockFormatter
+        'mobiact': data_formatters.mobiact.MobiActFormatter
     }
 
     return data_formatter_class[self.experiment]()

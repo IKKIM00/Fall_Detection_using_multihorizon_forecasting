@@ -1,5 +1,7 @@
 results/
 repo/
 dataset/
-:q!
+.ipynb_checkpoints/
+
+*/__pycache__/
 
