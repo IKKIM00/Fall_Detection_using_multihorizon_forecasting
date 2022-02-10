@@ -42,7 +42,7 @@ import libs.utils as utils
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-import keras
+from tensorflow import keras
 # from keras.utils.training_utils import multi_gpu_model
 
 # from swa.keras import SWA

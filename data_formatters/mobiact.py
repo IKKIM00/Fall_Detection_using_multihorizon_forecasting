@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import data_formatters.base
 import libs.utils as utils
 import pandas as pd
@@ -35,7 +36,7 @@ class MobiActFormatter(GenericDataFormatter):
         self._target_scaler = None
         self._num_classes_per_cat_input = None
 
-    def split_data(self, dataset_dir, readme_dir='dataset/mobiact_dataset'):
+    def split_data(self, dataset_dir):
         # 1. collect information included in readme.txt file
         print('Formatting train-valid-test splits.')
 

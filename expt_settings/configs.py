@@ -63,7 +63,7 @@ class ExperimentConfig(object):
 
     self.root_folder = root_folder
     self.experiment = experiment
-    self.data_folder = os.path.join(root_folder, 'dataset', experiment)
+    self.data_folder = 'dataset/'
     self.model_folder = os.path.join(root_folder, 'saved_models', experiment)
     self.results_folder = os.path.join(root_folder, 'results', experiment)
 
@@ -78,7 +78,7 @@ class ExperimentConfig(object):
   @property
   def data_csv_path(self):
     csv_path = {
-        'mobiact': 'mobi_preprocessed/'
+        'mobiact': 'mobiact_preprocessed/'
     }
 
     return os.path.join(self.data_folder, csv_path[self.experiment])
