@@ -15,6 +15,13 @@ To verify benchmark performance, we faithfully reproduced the 1D CNN and LSTM-ba
 
 Signle LSTM and stacked LSTM model is based on the model architecture proposed in 2019 by Luna et al ([paper](https://github.com/IKKIM00/Fall_Detection_using_multihorizon_forecasting/files/6866652/sensors-19-04885-v2.pdf)).
 
+# Requirements
+`python==3.7.3`
+
+`tensorflow-gpu==2.5.3` or `tensorflow==2.5.3`
+
+`sklearn==0.24.2`
+
 ## Multi-horizon forecasting result
 ![model_pred](https://user-images.githubusercontent.com/37397258/126738142-7fc1218d-eb55-4f88-9c24-4112b320354b.jpg)
 Prediction results for the SmartFall, Notch, DLR and MobiAct datasets in order using:
