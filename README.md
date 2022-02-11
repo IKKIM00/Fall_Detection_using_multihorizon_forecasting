@@ -3,7 +3,7 @@ This code is for paper "Fall Detection Based on Multi-Horizon Forecasting"( Curr
 
 A fall detection method with multi-horizon forecasting usring Temporal Fusion Transformers and other deep learning methods.
 
-For deep methods, 1D CNN, single LSTM, stacked LSTM were used.
+For other deep learning methods, 1D CNN, single LSTM, stacked LSTM were used.
 
 All models were configured to forecast falls through the window size of data from the perspective of regression instead of classification.
 
