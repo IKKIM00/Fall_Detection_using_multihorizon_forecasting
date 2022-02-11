@@ -22,11 +22,8 @@ for the main experiments used in the publication.
 
 import os
 
-import data_formatters.electricity
-import data_formatters.favorita
-import data_formatters.traffic
-import data_formatters.volatility
 import data_formatters.mobiact
+import data_formatters.notch
 
 
 class ExperimentConfig(object):
@@ -78,7 +75,8 @@ class ExperimentConfig(object):
   @property
   def data_csv_path(self):
     csv_path = {
-        'mobiact': 'mobiact_preprocessed/'
+        'mobiact': 'mobiact_preprocessed/',
+        'notch': 'notch_dataset/'
     }
 
     return os.path.join(self.data_folder, csv_path[self.experiment])
@@ -96,7 +94,8 @@ class ExperimentConfig(object):
     """
 
     data_formatter_class = {
-        'mobiact': data_formatters.mobiact.MobiActFormatter
+        'mobiact': data_formatters.mobiact.MobiActFormatter,
+        'notch': data_formatters.notch.NotchFormatter
     }
 
     return data_formatter_class[self.experiment]()
