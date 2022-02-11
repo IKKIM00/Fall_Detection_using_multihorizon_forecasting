@@ -11,6 +11,9 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
+import warnings
+warnings.simplefilter(action='ignore')
+
 ExperimentConfig = expt_settings.configs.ExperimentConfig
 HyperparamOptManager = libs.hyperparam_opt.HyperparamOptManager
 ModelClass = libs.tft_model.TemporalFusionTransformer
@@ -45,6 +48,7 @@ def main(expt_name, use_gpu, restart_opt, model_folder, hyperparam_iterations,
     tf.compat.v1.get_default_graph()
     with tf.Graph().as_default(), tf.compat.v1.Session(config=tf_config) as sess:
         tf.compat.v1.keras.backend.set_session(sess)
+        tf.compat.v1.experimental.output_all_intermediates(True)
         params = opt_manager.get_next_parameters()
         # Create a TFT model
         model = ModelClass(params, use_cudnn=True)
