@@ -63,7 +63,7 @@ def main(expt_name, use_gpu, restart_opt, model_folder, hyperparam_iterations,
             print("Skipping bad configuration....")
             val_loss = np.inf
         opt_manager.update_score(params, val_loss, model)
-        tf.compat.v1.keras.backend.set_session(default_keras_session)
+        tf.compat.v1.keras.backend.set_session(sess)
         model.save(model_folder)
 
     print("*** Running tests ***")
@@ -97,7 +97,7 @@ def main(expt_name, use_gpu, restart_opt, model_folder, hyperparam_iterations,
         p90_loss = utils.numpy_normalised_quantile_loss(
             extract_numerical_data(targets), extract_numerical_data(p90_forecast),
             0.9)
-        tf.keras.backend.set_session(default_keras_session)
+        # tf.keras.backend.set_session(default_keras_session)
 
     print("Hyperparam optimisation completed @ {}".format(dte.datetime.now()))
     print("Best validation loss = {}".format(val_loss))
