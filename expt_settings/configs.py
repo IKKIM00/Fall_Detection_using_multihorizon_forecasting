@@ -24,6 +24,8 @@ import os
 
 import data_formatters.mobiact
 import data_formatters.notch
+import data_formatters.smartfall
+import data_formatters.dlr
 
 
 class ExperimentConfig(object):
@@ -76,7 +78,9 @@ class ExperimentConfig(object):
   def data_csv_path(self):
     csv_path = {
         'mobiact': 'mobiact_preprocessed/',
-        'notch': 'notch_dataset/'
+        'notch': 'notch_dataset/',
+        'smartfall': 'smartFall_dataset/',
+        'dlr': 'dlr_preprocessed/'
     }
 
     return os.path.join(self.data_folder, csv_path[self.experiment])
@@ -95,7 +99,9 @@ class ExperimentConfig(object):
 
     data_formatter_class = {
         'mobiact': data_formatters.mobiact.MobiActFormatter,
-        'notch': data_formatters.notch.NotchFormatter
+        'notch': data_formatters.notch.NotchFormatter,
+        'smartfall': data_formatters.smartfall.SmartFallFormatter,
+        'dlr': data_formatters.dlr.DLRFormatter
     }
 
     return data_formatter_class[self.experiment]()
