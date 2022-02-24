@@ -69,9 +69,15 @@ Please download all datasets through the URL or `zip` files provided in `dataset
 3. Save all preprocessed files in `dataset/mobiact_preprocessed`.
 
 ## For DL Methods
-Each file named as `DLR.ipynb`, `MobiAct.ipynb`, `Notch.ipynb`, `SmartFall.ipynb` is for deep learning methods.
 
-In each ipynb file, you can choose which DL method you want to use(`CNN, singleLSTM, stackedLSTM`)
+> run `python dl_main.py <dataset_name> <model> <use_gpu>`
+
+- `dataset_name`: choose between <mobiact, dlr, notch, smartfall>
+- `model`: choose between <singleLSTM, stackedLSTM, CNN>
+- `use_gpu`: if like to use GPU set to `yes` or set to `no`
+
+-----
+- You can find all previous ipynb files in `prev_jupyter_files/` .
 
 
 ## For TFT Method
