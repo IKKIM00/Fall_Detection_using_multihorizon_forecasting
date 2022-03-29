@@ -69,12 +69,28 @@ Please download all datasets through the URL or `zip` files provided in `dataset
 3. Save all preprocessed files in `dataset/mobiact_preprocessed`.
 
 ## For DL Methods
-Each file named as `DLR.ipynb`, `MobiAct.ipynb`, `Notch.ipynb`, `SmartFall.ipynb` is for deep learning methods.
 
-In each ipynb file, you can choose which DL method you want to use(`CNN, singleLSTM, stackedLSTM`)
+> run `python dl_main.py <dataset_name> <model> <use_gpu>`
+
+- `dataset_name`: choose between <mobiact, dlr, notch, smartfall>
+- `model`: choose between <singleLSTM, stackedLSTM, CNN>
+- `use_gpu`: if like to use GPU set to `yes` or set to `no`
+
+-----
+- You can find all previous ipynb files in `prev_jupyter_files/` .
 
 
 ## For TFT Method
-1. Clone https://github.com/google-research/google-research/tree/master/tft
-2. Use each file named as `dlr_tft.ipynb`, `mobi_tft.ipynb`, `notchFall_tft.ipynb` and `smartFall_tft.ipynb` for TFT method.
-3. Files named as `dlr_tft_wo_bioinfo.ipynb` and `mobi_tft_no_bioinfo.ipynb` are for cases when personal biometric information is removed.
+
+### All files included are modified version of [original github repo](https://github.com/google-research/google-research/tree/master/tft) with all version error fixed(with tensorflow v2).
+
+> run `python tft_main.py <dataset_name> <save_dir_name> <use_gpu> <restart_opt>`
+
+- `dataset_name`: choose between <mobiact, dlr, notch, smartfall>
+- `save_dir_name`: set save name
+- `use_gpu`: if like to use GPU set to `yes` or set to `no`
+- `restart_opt`: if like to restart set to `yes` or set to `no`
+
+----
+- You can find all previous ipynb files in `prev_jupyter_files/` .
+- For the cases of personal biometric information removed, use files: `prev_jupyter_files/dlr_tft_wo_bioinfo.ipynb ` and `prev_jupyter_files/mobi_tft_no_bioinfo.ipynb`
