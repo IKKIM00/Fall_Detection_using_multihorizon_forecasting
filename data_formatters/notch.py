@@ -51,9 +51,10 @@ class NotchFormatter(GenericDataFormatter):
                 if idx == 6:
                     test = pd.concat([test, data])
 
-            self.set_scalers(train)
+        self.set_scalers(train)
 
-            return (self.transform_inputs(data) for data in [train, valid, test])
+        return (self.transform_inputs(data) for data in [train, valid, test])
+
     def set_scalers(self, df):
         """
         Calibrates scalers using the data supplied.
@@ -77,7 +78,7 @@ class NotchFormatter(GenericDataFormatter):
         real_inputs = utils.extract_cols_from_data_type(
             DataTypes.REAL_VALUED, column_definitions,
             {InputTypes.ID, InputTypes.TIME})
-
+        print(real_inputs)
         data = df[real_inputs].values
         self._real_scalers = sklearn.preprocessing.StandardScaler().fit(data)
 
