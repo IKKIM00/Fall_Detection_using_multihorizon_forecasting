@@ -114,27 +114,6 @@ def main(expt_name, use_gpu, restart_opt, model_folder, hyperparam_iterations,
     print("Normalised Quantile Loss for Test Data: P50={}, P90={}".format(
         p50_loss.mean(), p90_loss.mean()))
 
-    plot_range = {
-        'notch': [600, 1600],
-        'dlr': [600, 1600]
-
-    }
-    plot_ticks = {
-        'notch': [np.arange(0, 1001, 200), np.arange(0, 1.1, 0.5)]
-    }
-
-    plt.figure(figsize=(20, 10))
-    plt.plot(output_map['targets']['t+0'][plot_range[expt_name][0]:plot_range[expt_name][1]], label='target', color='#E31A1C', linewidth=4)
-    plt.plot(output_map['p10']['t+0'][plot_range[expt_name][0]:plot_range[expt_name][1]], label='p10', color='#009ADE', linestyple='--', linewidth=4)
-    plt.plot(output_map['p50']['t+0'][plot_range[expt_name][0]:plot_range[expt_name][1]], label='p50', color='#009ADE', linestyple='--', linewidth=4)
-    plt.plot(output_map['p90']['t+0'][plot_range[expt_name][0]:plot_range[expt_name][1]], label='p90', c='#AF588A', linestyple='--', linewidth=4)
-    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper right', fontsize=20, ncol=4)
-    plt.xticks(plot_ticks[expt_name][0], fontsize=20)
-    plt.yticks(plot_ticks[expt_name][1], fontsize=20)
-    plt.xlabel('Time Step', fontsize=30)
-    plt.ylabel('Value', fontsize=30)
-    plt.savefig(model_folder + f'{expt_name}.png')
-
 if __name__=="__main__":
     def get_args():
         """Returns settings from command line."""
