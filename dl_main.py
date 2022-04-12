@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from libs.dl_utils import *
 from model.LSTM import LSTM
 from model.CNN import CNN
+from model.MATCN import MATCNModel
 
 np.random.seed(42)
 
@@ -22,14 +23,16 @@ def main(expt_name, model_type, batch_size=256, lr=0.01, n_epochs=300, use_gpu='
         'notch': 'dataset/Notch_Dataset/',
         'smartfall': 'dataset/SmartFall_Dataset/'
     }
-
-    get_dataset = {
-        'mobiact': get_mobiact(dataset_dirs[expt_name]),
-        'dlr': get_dlr(dataset_dirs[expt_name]),
-
-    }
-
-    X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler = get_dataset[expt_name]
+    if expt_name == "mobiact":
+        X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler = get_mobiact(dataset_dirs[expt_name])
+    elif expt_name == "dlr":
+        X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler = get_dlr(dataset_dirs[expt_name])
+    elif expt_name == "smartfall":
+        X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler = get_smartfall(dataset_dirs[expt_name])
+    elif expt_name == "notch":
+        X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler = get_notch(dataset_dirs[expt_name])
+    else:
+        assert AssertionError("Wrong Dataset name")
 
     train_data = TensorDataset(torch.Tensor(X_train), torch.Tensor(y_train))
     valid_data = TensorDataset(torch.Tensor(X_valid), torch.Tensor(y_valid))
@@ -57,13 +60,20 @@ def main(expt_name, model_type, batch_size=256, lr=0.01, n_epochs=300, use_gpu='
         'notch': [3, [8, 16, 64], 32],
         'smartfall': [3, [80, 160, 320], 32]
     }
+    matcn_params = {
+        'mobiact': [6, 43],
+        'dlr': [6, 100],
+        'notch': [3, 32],
+        'smartfall': [3, 32]
+    }
+
     def choose_model(model_type):
-        if model_type == 'singleLSTM':
+        if model_type == 'SingleLSTM':
             params = singlelstm_params[expt_name]
             model = LSTM(params[0], params[1], params[2], num_layers=1).to(device)
             save_path = 'results/singleLSTM/'
             save_file_name = f'{save_path}singleLSTM_{expt_name}.pth'
-        elif model_type == 'stackedLSTM':
+        elif model_type == 'StackedLSTM':
             params = stackedlstm_params[expt_name]
             model = LSTM(params[0], params[1], params[2], num_layers=2).to(device)
             save_path = 'results/stackedLSTM/'
@@ -73,10 +83,26 @@ def main(expt_name, model_type, batch_size=256, lr=0.01, n_epochs=300, use_gpu='
             model = CNN(params[0], params[1], params[2]).to(device)
             save_path = 'results/CNN/'
             save_file_name = f'{save_path}CNN_{expt_name}.pth'
+        elif model_type == 'MATCN':
+            params = matcn_params[expt_name]
+            model = MATCNModel(tcn_layer_num=3,
+                               tcn_kernel_size=3,
+                               tcn_input_dim=params[0],
+                               tcn_filter_num=64,
+                               window_size=params[1],
+                               forecast_horizon=params[1],
+                               num_ouput_time_series=params[0],
+                               use_bias=True,
+                               tcn_dropout_rate=0.3)
+            save_path = 'results/MATCN/'
+            save_file_name = f'{save_path}MATCN_{expt_name}.pth'
         return model, save_path, save_file_name
 
     model, save_path, save_file_name = choose_model(model_type)
     print(model)
+
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=optimizer,

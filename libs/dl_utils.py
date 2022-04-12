@@ -40,9 +40,10 @@ def fit(model, model_type, train_loader, valid_loader, optimizer, scheduler, cri
         ###################
         model.train()
         for data, target in train_loader:
+            # print(data.shape, target.shape)
             optimizer.zero_grad()
-            if model_type != 'CNN':
-                data = torch.permute(data, (0, 2, 1)).contiguous()
+            if model_type in ['SingleLSTM', 'StackedLSTM']:
+                data = data.permute(0, 2, 1).contiguous()
             output = model(data.to(device))
             if model_type == 'CNN':
                 output = output.squeeze()
@@ -56,8 +57,8 @@ def fit(model, model_type, train_loader, valid_loader, optimizer, scheduler, cri
         ######################
         model.eval()
         for data, target in valid_loader:
-            if model_type != 'CNN':
-                data = torch.permute(data, (0, 2, 1)).contiguous()
+            if model_type in ['SingleLSTM', 'StackedLSTM']:
+                data = data.permute(0, 2, 1).contiguous()
             output = model(data.to(device))
             if model_type == 'CNN':
                 output = output.squeeze()
@@ -102,7 +103,7 @@ def evaluate_model(model, model_type, criterion, test_loader, device):
     model.eval()
     for data, target in test_loader:
         if model_type != 'CNN':
-            data = torch.permute(data, (0, 2, 1)).contiguous()
+            data = data.permute(0, 2, 1).contiguous()
         output = model(data.to(device))
         if model_type == 'CNN':
             output = output.squeeze()
@@ -114,7 +115,7 @@ def evaluate_model(model, model_type, criterion, test_loader, device):
     return test_loss / len(test_loader), y_test, y_hat
 
 
-def dataProcessing(data, tw, c_num=6):
+def dataProcessing(data, tw, label_name, c_num=6):
     X_data, y_data = list(), list()
     for i in range(tw, len(data) - tw):
         acc_x = data['acc_x'][i - tw: i]
@@ -128,7 +129,7 @@ def dataProcessing(data, tw, c_num=6):
         else:
             X_data.append([acc_x.values, acc_y.values, acc_z.values])
 
-        outcome = data['label'][i: i + tw]
+        outcome = data[label_name][i: i + tw]
         y_data.append([outcome.values])
     return X_data, y_data
 
@@ -165,7 +166,6 @@ def get_mobiact(dataset_dir):
     transformed_train = pd.concat([obs_train, tar_train], axis=1)
     transformed_train['per-id'] = train['person_id'].values
     transformed_train.columns = columns
-    # transformed_train.head()
 
     obs_valid = valid[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_valid = obs_scaler.transform(obs_valid)
@@ -189,9 +189,9 @@ def get_mobiact(dataset_dir):
     transformed_test['per-id'] = test['person_id'].values
     transformed_test.columns = columns
 
-    X_train, y_train = dataProcessing(transformed_train, tw=43)
-    X_valid, y_valid = dataProcessing(transformed_valid, tw=43)
-    X_test, y_test = dataProcessing(transformed_test, tw=43)
+    X_train, y_train = dataProcessing(transformed_train, label_name='label_encoded', tw=43)
+    X_valid, y_valid = dataProcessing(transformed_valid, label_name='label_encoded', tw=43)
+    X_test, y_test = dataProcessing(transformed_test, label_name='label_encoded', tw=43)
     return X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler
 
 def get_dlr(dataset_dir):
@@ -250,9 +250,9 @@ def get_dlr(dataset_dir):
     transformed_test['per_idx'] = test['per_idx'].values
     transformed_test.columns = columns
 
-    X_train, y_train = dataProcessing(transformed_train, tw=100)
-    X_valid, y_valid = dataProcessing(transformed_valid, tw=100)
-    X_test, y_test = dataProcessing(transformed_test, tw=100)
+    X_train, y_train = dataProcessing(transformed_train, label_name='label_encoded', tw=100)
+    X_valid, y_valid = dataProcessing(transformed_valid, label_name='label_encoded', tw=100)
+    X_test, y_test = dataProcessing(transformed_test, label_name='label_encoded', tw=100)
     return X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler
 
 def get_notch(dataset_dir):
@@ -308,9 +308,9 @@ def get_notch(dataset_dir):
     transformed_test['per-id'] = test['person_id'].values
     transformed_test.columns = columns
 
-    X_train, y_train = dataProcessing(transformed_train, 32, c_num=3)
-    X_valid, y_valid = dataProcessing(transformed_valid, 32, c_num=3)
-    X_test, y_test = dataProcessing(transformed_test, 32, c_num=3)
+    X_train, y_train = dataProcessing(transformed_train, 32, label_name='AnyFall', c_num=3)
+    X_valid, y_valid = dataProcessing(transformed_valid, 32, label_name='AnyFall', c_num=3)
+    X_test, y_test = dataProcessing(transformed_test, 32, label_name='AnyFall', c_num=3)
     return X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler
 
 def get_smartfall(dataset_dir):
@@ -346,8 +346,8 @@ def get_smartfall(dataset_dir):
 
     train, valid = train_test_split(transformed_train, test_size=0.25, shuffle=False, random_state=0)
 
-    X_train, y_train = dataProcessing(train, tw=32, c_num=3)
-    X_valid, y_valid = dataProcessing(valid, tw=32, c_num=3)
-    X_test, y_test = dataProcessing(transformed_test, tw=32, c_num=3)
+    X_train, y_train = dataProcessing(train, tw=32, label_name='outcome', c_num=3)
+    X_valid, y_valid = dataProcessing(valid, tw=32, label_name='outcome', c_num=3)
+    X_test, y_test = dataProcessing(transformed_test, tw=32, label_name='outcome', c_num=3)
     return X_train, y_train, X_valid, y_valid, X_test, y_test, obs_scaler, tar_scaler
 
