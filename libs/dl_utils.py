@@ -47,7 +47,7 @@ def fit(model, model_type, train_loader, valid_loader, optimizer, scheduler, cri
             output = model(data.to(device))
             if model_type == 'CNN':
                 output = output.squeeze()
-            loss = criterion(output, target.squeeze())
+            loss = criterion(output, target.to(device).squeeze())
             loss.backward()
             optimizer.step()
             train_losses.append(loss.item())
@@ -62,7 +62,7 @@ def fit(model, model_type, train_loader, valid_loader, optimizer, scheduler, cri
             output = model(data.to(device))
             if model_type == 'CNN':
                 output = output.squeeze()
-            loss = criterion(output, target.squeeze())
+            loss = criterion(output, target.to(device).squeeze())
             valid_losses.append(loss.item())
 
         train_loss = np.average(train_losses)
@@ -107,12 +107,12 @@ def evaluate_model(model, model_type, criterion, test_loader, device):
         output = model(data.to(device))
         if model_type == 'CNN':
             output = output.squeeze()
-        loss = criterion(output, target.squeeze())
+        loss = criterion(output, target.to(device).squeeze())
         test_loss += loss.item()
         y_test += list(target.squeeze().detach().cpu().numpy())
         y_hat += list(output.squeeze().detach().cpu().numpy())
 
-    return test_loss / len(test_loader), np.asarray(y_test), np.asarray(y_hat)
+    return test_loss / len(test_loader), np.array(y_test), np.array(y_hat)
 
 
 def dataProcessing(data, tw, label_name, c_num=6):
