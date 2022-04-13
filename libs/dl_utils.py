@@ -155,7 +155,7 @@ def get_mobiact(dataset_dir):
     obs_scaler = StandardScaler()
     tar_scaler = StandardScaler()
 
-    columns = ['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z', 'label', 'person_id']
+    columns = ['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z', 'label', 'label_encoded']
     obs_train = train[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_train = obs_scaler.fit_transform(obs_train)
     tar_train = np.asarray(train['label_encoded'])
@@ -164,8 +164,8 @@ def get_mobiact(dataset_dir):
     obs_train = pd.DataFrame(obs_train)
     tar_train = pd.DataFrame(tar_train)
     transformed_train = pd.concat([obs_train, tar_train], axis=1)
-    transformed_train['per-id'] = train['person_id'].values
     transformed_train.columns = columns
+    transformed_train['per-id'] = train['person_id'].values
 
     obs_valid = valid[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_valid = obs_scaler.transform(obs_valid)
@@ -175,8 +175,8 @@ def get_mobiact(dataset_dir):
     obs_valid = pd.DataFrame(obs_valid)
     tar_valid = pd.DataFrame(tar_valid)
     transformed_valid = pd.concat([obs_valid, tar_valid], axis=1)
-    transformed_valid['per-id'] = valid['person_id'].values
     transformed_valid.columns = columns
+    transformed_valid['per-id'] = valid['person_id'].values
 
     obs_test = test[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_test = obs_scaler.transform(obs_test)
@@ -186,8 +186,8 @@ def get_mobiact(dataset_dir):
     obs_test = pd.DataFrame(obs_test)
     tar_test = pd.DataFrame(tar_test)
     transformed_test = pd.concat([obs_test, tar_test], axis=1)
-    transformed_test['per-id'] = test['person_id'].values
     transformed_test.columns = columns
+    transformed_test['per-id'] = test['person_id'].values
 
     X_train, y_train = dataProcessing(transformed_train, label_name='label_encoded', tw=43)
     X_valid, y_valid = dataProcessing(transformed_valid, label_name='label_encoded', tw=43)
@@ -215,7 +215,8 @@ def get_dlr(dataset_dir):
 
     obs_scaler = StandardScaler()
     tar_scaler = StandardScaler()
-    columns = ['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z', 'label', 'per_idx']
+
+    columns = ['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z', 'label', 'label_encoded']
 
     obs_train = train[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_train = obs_scaler.fit_transform(obs_train)
@@ -225,8 +226,8 @@ def get_dlr(dataset_dir):
     obs_train = pd.DataFrame(obs_train)
     tar_train = pd.DataFrame(tar_train)
     transformed_train = pd.concat([obs_train, tar_train], axis=1)
-    transformed_train['per_idx'] = train['per_idx'].values
     transformed_train.columns = columns
+    transformed_train['per_idx'] = train['per_idx'].values
 
     obs_valid = valid[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_valid = obs_scaler.transform(obs_valid)
@@ -236,8 +237,8 @@ def get_dlr(dataset_dir):
     obs_valid = pd.DataFrame(obs_valid)
     tar_valid = pd.DataFrame(tar_valid)
     transformed_valid = pd.concat([obs_valid, tar_valid], axis=1)
-    transformed_valid['per_idx'] = valid['per_idx'].values
     transformed_valid.columns = columns
+    transformed_valid['per_idx'] = valid['per_idx'].values
 
     obs_test = test[['acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z']]
     obs_test = obs_scaler.transform(obs_test)
@@ -247,8 +248,8 @@ def get_dlr(dataset_dir):
     obs_test = pd.DataFrame(obs_test)
     tar_test = pd.DataFrame(tar_test)
     transformed_test = pd.concat([obs_test, tar_test], axis=1)
-    transformed_test['per_idx'] = test['per_idx'].values
     transformed_test.columns = columns
+    transformed_test['per_idx'] = test['per_idx'].values
 
     X_train, y_train = dataProcessing(transformed_train, label_name='label_encoded', tw=100)
     X_valid, y_valid = dataProcessing(transformed_valid, label_name='label_encoded', tw=100)
