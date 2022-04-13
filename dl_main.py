@@ -3,6 +3,8 @@ import argparse
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+
 from libs.dl_utils import *
 from model.LSTM import LSTM
 from model.CNN import CNN
@@ -114,8 +116,12 @@ def main(expt_name, model_type, batch_size=256, lr=0.01, n_epochs=300, use_gpu='
     model, train_loss, valid_loss = fit(model, model_type, train_loader, valid_loader, optimizer, scheduler, criterion, n_epochs, device, save_file_name)
     test_loss, y_target, y_hat = evaluate_model(model, model_type, criterion, test_loader, device)
 
+    y_target_original = tar_scaler.reverse_transform(y_target)
+    y_predicted = tar_scaler.reverse_transform(y_hat)
+
     print('Fianl test loss: ', test_loss)
-    np.savez(f'{save_path}predicted_{expt_name}.npz')
+    y_target_original.savez(f'{save_path}y_target_{expt_name}.npy')
+    y_predicted.savez(f'{save_path}y_predicted_{expt_name}.npy')
     print(f'Saved predicted value in {save_path}')
 
 
