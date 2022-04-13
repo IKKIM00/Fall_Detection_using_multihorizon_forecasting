@@ -1,5 +1,6 @@
 import argparse
 
+import numpy as np
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -36,9 +37,9 @@ def main(expt_name, model_type, batch_size=256, lr=0.01, n_epochs=300, use_gpu='
     else:
         assert AssertionError("Wrong Dataset name")
 
-    train_data = TensorDataset(torch.Tensor(X_train), torch.Tensor(y_train))
-    valid_data = TensorDataset(torch.Tensor(X_valid), torch.Tensor(y_valid))
-    test_data = TensorDataset(torch.Tensor(X_test), torch.Tensor(y_test))
+    train_data = TensorDataset(torch.from_numpy(np.array(X_train)), torch.from_numpy(np.array(y_train)))
+    valid_data = TensorDataset(torch.from_numpy(np.array(X_valid)), torch.from_numpy(np.array(y_valid)))
+    test_data = TensorDataset(torch.from_numpy(np.array(X_test)), torch.from_numpy(np.array(y_test)))
 
     train_loader = DataLoader(train_data, shuffle=False, batch_size=batch_size, num_workers=2)
     valid_loader = DataLoader(valid_data, shuffle=False, batch_size=batch_size, num_workers=2)
@@ -116,8 +117,8 @@ def main(expt_name, model_type, batch_size=256, lr=0.01, n_epochs=300, use_gpu='
     model, train_loss, valid_loss = fit(model, model_type, train_loader, valid_loader, optimizer, scheduler, criterion, n_epochs, device, save_file_name)
     test_loss, y_target, y_hat = evaluate_model(model, model_type, criterion, test_loader, device)
 
-    y_target_original = tar_scaler.reverse_transform(y_target)
-    y_predicted = tar_scaler.reverse_transform(y_hat)
+    y_target_original = tar_scaler.inverse_transform(y_target)
+    y_predicted = tar_scaler.inverse_transform(y_hat)
 
     print('Fianl test loss: ', test_loss)
     y_target_original.savez(f'{save_path}y_target_{expt_name}.npy')
