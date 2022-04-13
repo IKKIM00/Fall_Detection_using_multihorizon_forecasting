@@ -102,7 +102,7 @@ def evaluate_model(model, model_type, criterion, test_loader, device):
 
     model.eval()
     for data, target in test_loader:
-        if model_type != 'CNN':
+        if model_type in ['SingleLSTM', 'StackedLSTM']:
             data = data.permute(0, 2, 1).contiguous()
         output = model(data.to(device))
         if model_type == 'CNN':
@@ -112,7 +112,7 @@ def evaluate_model(model, model_type, criterion, test_loader, device):
         y_test += list(target.squeeze().detach().cpu().numpy())
         y_hat += list(output.squeeze().detach().cpu().numpy())
 
-    return test_loss / len(test_loader), y_test, y_hat
+    return test_loss / len(test_loader), np.asarray(y_test), np.asarray(y_hat)
 
 
 def dataProcessing(data, tw, label_name, c_num=6):
