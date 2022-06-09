@@ -1,5 +1,5 @@
 # General Description
-This code is for paper "Fall Detection Based on Multi-Horizon Forecasting"( Currently under review )
+This is original code for paper "Fall Detection Based on Multi-Horizon Forecasting"(ICPR'22)
 
 A fall detection method with multi-horizon forecasting usring Temporal Fusion Transformers and other deep learning methods.
 
